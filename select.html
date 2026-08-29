@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پیرایش سالار | انتخاب روش رزرو</title>
+  <style>
+    body {
+      font-family: Tahoma, sans-serif;
+      background: #121212;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+      text-align: center;
+      max-width: 350px;
+      width: 100%;
+      border: 1px solid #333;
+    }
+    h2 { color: #f39c12; margin-bottom: 8px; }
+    p { color: #aaa; font-size: 14px; margin-bottom: 25px; }
+    .btn {
+      display: block;
+      width: 100%;
+      padding: 14px 0;
+      margin: 10px 0;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 15px;
+      box-sizing: border-box;
+      transition: 0.2s;
+    }
+    .btn-bale { background: #27ae60; color: white; }
+    .btn-web { background: #3498db; color: white; }
+    .btn:active { transform: scale(0.98); }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>💈 پیرایش سالار</h2>
+    <p>لطفاً روش رزرو نوبت خود را انتخاب کنید:</p>
+
+    <!-- دکمه ورود به ربات بله -->
+    <a href="https://ble.ir/arminbarberbot" class="btn btn-bale">
+      💬 رزرو از طریق پیام‌رسان بله
+    </a>
+
+    <!-- دکمه هدایت به مینی‌اپ اصلی (همان index.html) -->
+    <a href="https://salarsalarzehi.github.io/barber-app/" class="btn btn-web">
+      🌐 رزرو مستقیم در مرورگر (بدون بله)
+    </a>
+  </div>
+
+</body>
+</html>
