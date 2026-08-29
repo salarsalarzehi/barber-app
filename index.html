@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>پیرایش سالار | رزرو آنلاین</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --gold: #d4af37;
+      --text: #ffffff;
+    }
+    body {
+      font-family: Tahoma, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 15px;
+      direction: rtl;
+    }
+    .header { text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
+    .header h2 { color: var(--gold); margin: 5px 0; }
+    .card { background: var(--card); border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
+    .btn { background: var(--gold); color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
+    .slot { display: inline-block; background: #2a2a2a; border: 1px solid #444; padding: 8px 12px; border-radius: 6px; margin: 4px; cursor: pointer; font-size: 13px; }
+    .slot.active { background: var(--gold); color: #000; font-weight: bold; }
+    .slot.disabled { background: #1a1a1a; color: #555; border-color: #222; text-decoration: line-through; pointer-events: none; }
+  </style>
+</head>
+<body>
+
+  <div class="header">
+    <h2>💈 پیرایش سالار</h2>
+    <p style="font-size: 12px; color: #aaa;">سامانه آنلاین رزرو نوبت</p>
+  </div>
+
+  <div class="card">
+    <h4 style="color: var(--gold); margin-top:0;">۱. انتخاب خدمت</h4>
+    <label><input type="checkbox" checked> اصلاح کامل سر و صورت (۱۵۰,۰۰۰ تومان)</label><br><br>
+    <label><input type="checkbox"> پاکسازی و فشیال پوست (۲۵۰,۰۰۰ تومان)</label>
+  </div>
+
+  <div class="card">
+    <h4 style="color: var(--gold); margin-top:0;">۲. انتخاب ساعت حضور</h4>
+    <div class="slot active">۱۶:۰۰ - ۱۷:۰۰</div>
+    <div class="slot">۱۷:۰۰ - ۱۸:۰۰</div>
+    <div class="slot disabled">۱۸:۰۰ - ۱۹:۰۰ (پر شد)</div>
+  </div>
+
+  <button class="btn" onclick="submitBooking()">تأیید و ثبت نوبت</button>
+
+  <script>
+    function submitBooking() {
+      alert("✅ نوبت شما در پیرایش سالار با موفقیت ثبت شد!");
+    }
+  </script>
+</body>
+</html>
