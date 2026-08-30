@@ -17,6 +17,13 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
 
+    <!-- فرم مخفی جهت دور زدن خطای CORS در مرورگر -->
+    <iframe name="bale_hidden_iframe" id="bale_hidden_iframe" style="display:none;"></iframe>
+    <form id="baleSubmitForm" method="POST" target="bale_hidden_iframe" style="display:none;">
+        <input type="hidden" name="chat_id" id="inputChatId">
+        <input type="hidden" name="text" id="inputText">
+    </form>
+
     <div class="w-full max-w-md bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[840px] relative">
         
         <!-- Header -->
@@ -25,7 +32,7 @@
                 <i class="fa-solid fa-angle-right text-base text-slate-400 cursor-pointer"></i>
                 <div class="flex flex-col">
                     <span class="font-bold text-white text-sm">ربات رزرو سالن سالار</span>
-                    <span class="text-[10px] text-emerald-400">@Arminhaghighibot</span>
+                    <span class="text-[10px] text-emerald-400">@arminbarberbot</span>
                 </div>
             </div>
             <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-emerald-500/20">
@@ -134,7 +141,7 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
-                <p class="text-xs text-slate-400">اطلاعات برای آرایشگر ارسال شد.</p>
+                <p class="text-xs text-slate-400">اطلاعات رزرو برای آرایشگر ارسال شد.</p>
             </div>
 
         </div>
@@ -219,22 +226,13 @@
             }
         }
 
-        // ارسال از طریق متد fetch با الگوی no-cors و fallback
-        async function sendToAdmin(text) {
-            const baleUrl = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage?chat_id=${ADMIN_CHAT_ID}&text=${encodeURIComponent(text)}`;
-
-            try {
-                // تلاش اول: ارسال مستقیم با mode no-cors
-                await fetch(baleUrl, { method: 'GET', mode: 'no-cors' });
-            } catch (err) {
-                // تلاش دوم: ارسال از طریق پروکسی برای دور زدن محدودیت مرورگر
-                try {
-                    const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(baleUrl)}`;
-                    await fetch(proxyUrl);
-                } catch (e) {
-                    console.error("خطا در ارسال پیام:", e);
-                }
-            }
+        // تابع ارسال پیام به بله با متد استاندارد Form Submit (بدون مشکـل CORS)
+        function sendBaleMessage(messageText) {
+            const form = document.getElementById('baleSubmitForm');
+            form.action = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`;
+            document.getElementById('inputChatId').value = ADMIN_CHAT_ID;
+            document.getElementById('inputText').value = messageText;
+            form.submit();
         }
 
         function nextStep() {
@@ -274,7 +272,7 @@
                                      `📝 توضیحات: ${note}\n` +
                                      `🔢 کد پیگیری: ${trackingCode}`;
 
-                sendToAdmin(adminMessage);
+                sendBaleMessage(adminMessage);
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
