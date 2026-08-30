@@ -7,6 +7,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh@main/css/yekan-bakh.css" rel="stylesheet" type="text/css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- اسکریپت رسمی مینی‌اپ بله -->
     <script src="https://tapi.bale.ai/static/js/bale-miniapp.js"></script>
     <style>
         body { font-family: 'Yekan Bakh', 'Vazirmatn', sans-serif; background-color: #0f172a; color: #f8fafc; }
@@ -134,7 +135,7 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
-                <p class="text-xs text-slate-400">اطلاعات رزرو برای آرایشگر ارسال شد.</p>
+                <p class="text-xs text-slate-400">اطلاعات رزرو ارسال گردید.</p>
             </div>
 
         </div>
@@ -148,7 +149,11 @@
     </div>
 
     <script>
-        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwd1Ai_xBJaV_QqKl0pPWbeGQ8h0cnfsdalVvUEIm7QTrUza0e7R9oZAFkweqMKG8sO/exec";
+        // آماده‌سازی اولیه SDK بله
+        if (window.Bale && window.Bale.WebApp) {
+            window.Bale.WebApp.ready();
+            window.Bale.WebApp.expand();
+        }
 
         const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
         let currentStep = 1, selectedService = null, selectedPrice = 0, selectedDate = null, selectedTime = null;
@@ -218,19 +223,6 @@
             }
         }
 
-        async function sendBookingToScript(messageText) {
-            try {
-                await fetch(GOOGLE_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: messageText })
-                });
-            } catch (err) {
-                console.error("ارسال با خطا مواجه شد:", err);
-            }
-        }
-
         function nextStep() {
             if (currentStep === 1) {
                 currentStep = 2;
@@ -260,15 +252,21 @@
 
                 const trackingCode = Math.floor(1000 + Math.random() * 9000);
 
-                const adminMessage = `💈 نوبت جدید در پیرایش سالار\n\n` +
-                                     `👤 مشتری: ${name}\n` +
-                                     `📞 تلفن: ${phone}\n` +
-                                     `✂️ خدمت: ${selectedService}\n` +
-                                     `⏰ زمان: ${selectedDate} (${selectedTime})\n` +
-                                     `📝 توضیحات: ${note}\n` +
-                                     `🔢 کد پیگیری: ${trackingCode}`;
+                const bookingData = `💈 نوبت جدید در پیرایش سالار\n\n` +
+                                    `👤 مشتری: ${name}\n` +
+                                    `📞 تلفن: ${phone}\n` +
+                                    `✂️ خدمت: ${selectedService}\n` +
+                                    `⏰ زمان: ${selectedDate} (${selectedTime})\n` +
+                                    `📝 توضیحات: ${note}\n` +
+                                    `🔢 کد پیگیری: ${trackingCode}`;
 
-                sendBookingToScript(adminMessage);
+                // ارسال مستقیم اطلاعات از طریق SDK بله به چت ربات
+                if (window.Bale && window.Bale.WebApp && window.Bale.WebApp.sendData) {
+                    window.Bale.WebApp.sendData(bookingData);
+                } else {
+                    alert("لطفاً مینی‌اپ را داخل پیام‌رسان بله باز کنید.");
+                    return;
+                }
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
