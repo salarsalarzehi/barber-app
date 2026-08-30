@@ -17,13 +17,6 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
 
-    <!-- فرم مخفی جهت دور زدن خطای CORS در مرورگر -->
-    <iframe name="bale_hidden_iframe" id="bale_hidden_iframe" style="display:none;"></iframe>
-    <form id="baleSubmitForm" method="POST" target="bale_hidden_iframe" style="display:none;">
-        <input type="hidden" name="chat_id" id="inputChatId">
-        <input type="hidden" name="text" id="inputText">
-    </form>
-
     <div class="w-full max-w-md bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[840px] relative">
         
         <!-- Header -->
@@ -32,7 +25,7 @@
                 <i class="fa-solid fa-angle-right text-base text-slate-400 cursor-pointer"></i>
                 <div class="flex flex-col">
                     <span class="font-bold text-white text-sm">ربات رزرو سالن سالار</span>
-                    <span class="text-[10px] text-emerald-400">@arminbarberbot</span>
+                    <span class="text-[10px] text-emerald-400">@arminbbot</span>
                 </div>
             </div>
             <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-emerald-500/20">
@@ -155,8 +148,7 @@
     </div>
 
     <script>
-        const BOT_TOKEN = "972040610:LLU3HZ9Pll5cHsC6nUOb4yxLgdMLVe1xQeg";
-        const ADMIN_CHAT_ID = "307937390";
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwd1Ai_xBJaV_QqKl0pPWbeGQ8h0cnfsdalVvUEIm7QTrUza0e7R9oZAFkweqMKG8sO/exec";
 
         const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
         let currentStep = 1, selectedService = null, selectedPrice = 0, selectedDate = null, selectedTime = null;
@@ -226,13 +218,17 @@
             }
         }
 
-        // تابع ارسال پیام به بله با متد استاندارد Form Submit (بدون مشکـل CORS)
-        function sendBaleMessage(messageText) {
-            const form = document.getElementById('baleSubmitForm');
-            form.action = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`;
-            document.getElementById('inputChatId').value = ADMIN_CHAT_ID;
-            document.getElementById('inputText').value = messageText;
-            form.submit();
+        async function sendBookingToScript(messageText) {
+            try {
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: messageText })
+                });
+            } catch (err) {
+                console.error("ارسال با خطا مواجه شد:", err);
+            }
         }
 
         function nextStep() {
@@ -272,7 +268,7 @@
                                      `📝 توضیحات: ${note}\n` +
                                      `🔢 کد پیگیری: ${trackingCode}`;
 
-                sendBaleMessage(adminMessage);
+                sendBookingToScript(adminMessage);
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
