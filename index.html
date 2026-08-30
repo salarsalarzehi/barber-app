@@ -1,115 +1,177 @@
-
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>پیرایش سالار | رزرو آنلاین</title>
+  <title>پیرایش سالار | رزرو نوبت</title>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    :root {
-      --bg: #121212;
-      --card: #1e1e1e;
-      --gold: #d4af37;
-      --text: #ffffff;
-    }
+    * { box-sizing: border-box; }
     body {
-      font-family: Tahoma, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      padding: 15px;
-      direction: rtl;
+      font-family: Tahoma, Arial, sans-serif;
+      background-color: #121212;
+      color: #ffffff;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
     }
-    .header { text-align: center; border-bottom: 1px solid #333; padding-bottom: 10px; }
-    .header h2 { color: var(--gold); margin: 5px 0; }
-    .card { background: var(--card); border: 1px solid #333; border-radius: 8px; padding: 12px; margin-bottom: 10px; }
-    .btn { background: var(--gold); color: #000; border: none; padding: 14px; width: 100%; border-radius: 8px; font-weight: bold; font-size: 16px; cursor: pointer; }
-    .slot { display: inline-block; background: #2a2a2a; border: 1px solid #444; padding: 8px 12px; border-radius: 6px; margin: 4px; cursor: pointer; font-size: 13px; }
-    .slot.active { background: var(--gold); color: #000; font-weight: bold; }
-    .slot.disabled { background: #1a1a1a; color: #555; border-color: #222; text-decoration: line-through; pointer-events: none; }
+    .container {
+      max-width: 400px;
+      width: 100%;
+      background: #1e1e1e;
+      padding: 20px;
+      border-radius: 16px;
+      border: 1px solid #333;
+    }
+    h2 { color: #f1c40f; text-align: center; margin-top: 0; }
+    .section-title { font-weight: bold; margin: 15px 0 10px; color: #ddd; }
+    
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+    .time-btn {
+      background: #2c3e50;
+      color: #fff;
+      border: 2px solid #34495e;
+      padding: 12px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: 0.2s;
+    }
+    .time-btn.selected {
+      background: #f1c40f;
+      color: #000;
+      border-color: #f39c12;
+    }
+    .time-btn.disabled {
+      background: #333333 !important;
+      color: #777777 !important;
+      border-color: #444444 !important;
+      cursor: not-allowed !important;
+      opacity: 0.6;
+    }
+
+    .submit-btn {
+      width: 100%;
+      background: #27ae60;
+      color: white;
+      border: none;
+      padding: 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <div class="header">
+  <div class="container">
     <h2>💈 پیرایش سالار</h2>
-    <p style="font-size: 12px; color: #aaa;">سامانه آنلاین رزرو نوبت</p>
+    <p style="text-align: center; color: #aaa; font-size: 13px;">لطفاً زمان حضور خود را انتخاب کنید:</p>
+
+    <div class="section-title">⏰ انتخاب ساعت:</div>
+    <div class="time-grid" id="timeGrid">در حال دریافت ساعت‌ها...</div>
+
+    <button class="submit-btn" onclick="submitBooking()">ثبت و ارسال نوبت</button>
   </div>
-
-  <div class="card">
-    <h4 style="color: var(--gold); margin-top:0;">۱. انتخاب خدمت</h4>
-    <label><input type="checkbox" checked> اصلاح کامل سر و صورت (۱۵۰,۰۰۰ تومان)</label><br><br>
-    <label><input type="checkbox"> پاکسازی و فشیال پوست (۲۵۰,۰۰۰ تومان)</label>
-  </div>
-
-  <div class="card">
-    <h4 style="color: var(--gold); margin-top:0;">۲. انتخاب ساعت حضور</h4>
-    <div class="slot active">۱۶:۰۰ - ۱۷:۰۰</div>
-    <div class="slot">۱۷:۰۰ - ۱۸:۰۰</div>
-    <div class="slot disabled">۱۸:۰۰ - ۱۹:۰۰ (پر شد)</div>
-  </div>
-
-  <button class="btn" onclick="submitBooking()">تأیید و ثبت نوبت</button>
-
-<!-- اسکریپت رسمی بله برای دریافت اطلاعات کاربر -->
-  <script src="https://backend.bale.ai/sdk/bale-sdk.js"></script>
-
-<!-- اسکریپت SDK بله -->
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
   <script>
+    const API_URL = "https://api.npoint.io/97d3a2e9e382c87c3c41";
+
+    const allTimes = [
+      "۱۰:۰۰ - ۱۱:۰۰",
+      "۱۱:۰۰ - ۱۲:۰۰",
+      "۱۶:۰۰ - ۱۷:۰۰",
+      "۱۷:۰۰ - ۱۸:۰۰",
+      "۱۸:۰۰ - ۱۹:۰۰",
+      "۱۹:۰۰ - ۲۰:۰۰"
+    ];
+
+    let selectedTime = "";
+
+    fetch(API_URL)
+      .then(res => res.json())
+      .then(data => {
+        const disabledTimes = data.disabled || [];
+        const grid = document.getElementById("timeGrid");
+        grid.innerHTML = "";
+
+        allTimes.forEach(time => {
+          const btn = document.createElement("button");
+          btn.className = "time-btn";
+          
+          if (disabledTimes.includes(time)) {
+            btn.classList.add("disabled");
+            btn.innerText = time + " (تکمیل)";
+            btn.disabled = true;
+          } else {
+            btn.innerText = time;
+            btn.onclick = () => selectTime(btn, time);
+          }
+          grid.appendChild(btn);
+        });
+      });
+
+    function selectTime(btn, time) {
+      document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedTime = time;
+    }
+
     function submitBooking() {
+      if (!selectedTime) {
+        alert("لطفاً یک ساعت را برای رزرو انتخاب کنید.");
+        return;
+      }
+
       const BOT_TOKEN = "972040610:bOwW_rjWMTTb0WEU7ZGbetGw__T2CyZGH-4";
-      const MY_CHAT_ID = "307937390"; // آیدی شما (آرایشگر)
+      const MY_CHAT_ID = "307937390";
 
       const service = "اصلاح کامل سر و صورت";
-      const time = "۱۶:۰۰ - ۱۷:۰۰";
       const trackingCode = Math.floor(1000 + Math.random() * 9000);
 
-      // دریافت اطلاعات کاربر بله
       let customerId = null;
-      let customerName = "مشتری مرورگر";
+      let customerName = "مشتری بله";
 
       if (window.Telegram && window.Telegram.WebApp && window.Telegram.WebApp.initDataUnsafe && window.Telegram.WebApp.initDataUnsafe.user) {
         customerId = window.Telegram.WebApp.initDataUnsafe.user.id;
         customerName = window.Telegram.WebApp.initDataUnsafe.user.first_name || "مشتری";
       }
 
-      // ۱. ارسال پیام به مدیریت (شما)
       const adminMessage = `💈 **نوبت جدید در پیرایش سالار**\n\n` +
                            `👤 **مشتری:** ${customerName}\n` +
                            `✂️ **خدمت:** ${service}\n` +
-                           `⏰ **زمان:** ${time}\n` +
+                           `⏰ **زمان:** ${selectedTime}\n` +
                            `🔢 **کد پیگیری:** ${trackingCode}`;
 
       fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: MY_CHAT_ID,
-          text: adminMessage
-        })
+        body: JSON.stringify({ chat_id: MY_CHAT_ID, text: adminMessage })
       });
 
-      // ۲. ارسال پیام تأییدیه به خودِ مشتری در بله
       if (customerId) {
         const customerMessage = `💈 **پیرایش سالار**\n\n` +
                                 `سلام ${customerName} عزیز، نوبت شما با موفقیت ثبت شد! ✅\n\n` +
                                 `✂️ **خدمت:** ${service}\n` +
-                                `⏰ **زمان حضور:** ${time}\n` +
+                                `⏰ **زمان حضور:** ${selectedTime}\n` +
                                 `🔢 **کد پیگیری:** ${trackingCode}\n\n` +
                                 `منتظر دیدار شما هستیم.`;
 
         fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: customerId,
-            text: customerMessage
-          })
+          body: JSON.stringify({ chat_id: customerId, text: customerMessage })
         });
       }
 
-      alert("✅ نوبت شما با موفقیت ثبت شد!");
+      alert("✅ نوبت شما برای ساعت " + selectedTime + " با موفقیت ثبت شد!");
     }
   </script>
 </body>
