@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مینی‌اپ رزرو پیرایش سالار</title>
-    <!-- Tailwind CSS CDN -->
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- فونت یکان بخ -->
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh@main/css/yekan-bakh.css" rel="stylesheet" type="text/css" />
     <!-- آیکون‌های FontAwesome -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <!-- اسکریپت رسمی مینی‌اپ بله -->
+    <!-- SDK مینی‌اپ بله -->
     <script src="https://tapi.bale.ai/static/js/bale-miniapp.js"></script>
     <style>
         body { font-family: 'Yekan Bakh', 'Vazirmatn', sans-serif; background-color: #0f172a; color: #f8fafc; }
@@ -138,8 +138,8 @@
                 <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto border border-emerald-500/40">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <h2 class="text-base font-bold text-white">درخواست رزرو ثبت شد</h2>
-                <p class="text-xs text-slate-400 p-3 bg-slate-800 rounded-xl border border-slate-700" id="statusMessage">اطلاعات نوبت شما به ربات ارسال گردید.</p>
+                <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
+                <p class="text-xs text-slate-400 p-3 bg-slate-800 rounded-xl border border-slate-700" id="statusMessage">اطلاعات رزرو برای آرایشگر ارسال گردید.</p>
             </div>
 
         </div>
@@ -153,7 +153,10 @@
     </div>
 
     <script>
-        // مقداردهی SDK بله
+        // اطلاعات ربات و آرایشگر
+        const BOT_TOKEN = "599467653:Wyp_gC07L556DvV1zmT4kJzaSlN8VifDf5M";
+        const ADMIN_ID = "307937390";
+
         try {
             if (window.Bale && window.Bale.WebApp) {
                 window.Bale.WebApp.ready();
@@ -239,6 +242,20 @@
             }
         }
 
+        function sendDirectlyToBarber(bookingText) {
+            fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    chat_id: ADMIN_ID,
+                    text: bookingText
+                })
+            })
+            .then(res => res.json())
+            .then(data => console.log("پیام برای آرایشگر ارسال شد:", data))
+            .catch(err => console.error("خطا در ارسال پیام:", err));
+        }
+
         function nextStep() {
             if (currentStep === 1) {
                 currentStep = 2;
@@ -286,25 +303,12 @@
                                     `📝 توضیحات: ${note}\n` +
                                     `🔢 کد پیگیری: ${trackingCode}`;
 
-                let isSentViaSdk = false;
-
-                try {
-                    if (window.Bale && window.Bale.WebApp && window.Bale.WebApp.sendData) {
-                        window.Bale.WebApp.sendData(bookingData);
-                        isSentViaSdk = true;
-                    }
-                } catch(err) {
-                    console.log("Send Error:", err);
-                }
+                // ارسال مستقیم به حساب بله شما
+                sendDirectlyToBarber(bookingData);
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
                 document.getElementById('successState').classList.remove('hidden');
-
-                if (!isSentViaSdk) {
-                    document.getElementById('statusMessage').innerText = "متن رزرو کپی شد! لطفا آن را در چت ربات پیست کرده و بفرستید.";
-                    navigator.clipboard.writeText(bookingData);
-                }
             }
         }
 
