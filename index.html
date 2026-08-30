@@ -7,6 +7,8 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh@main/css/yekan-bakh.css" rel="stylesheet" type="text/css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <!-- اسکریپت رسمی مینی‌اپ بله -->
+    <script src="https://tapi.bale.ai/static/js/bale-miniapp.js"></script>
     <style>
         body { font-family: 'Yekan Bakh', 'Vazirmatn', sans-serif; background-color: #0f172a; color: #f8fafc; }
         .bale-header-gradient { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); }
@@ -136,6 +138,7 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
+                <p class="text-xs text-slate-400">اطلاعات برای ربات ارسال گردید.</p>
             </div>
 
         </div>
@@ -213,6 +216,20 @@
             }
         }
 
+        function sendDirectMessage(textMessage) {
+            // روش اول: ارسال مستقیم از طریق API بله
+            fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ chat_id: MY_CHAT_ID, text: textMessage })
+            }).catch(err => console.log(err));
+
+            // روش دوم: ارسال دیتا از طریق WebApp بله به چت ربات
+            if (window.Bale && window.Bale.sendData) {
+                window.Bale.sendData(textMessage);
+            }
+        }
+
         function nextStep() {
             if (currentStep === 1) {
                 currentStep = 2;
@@ -249,11 +266,7 @@
                                      `📝 **توضیحات:** ${note}\n` +
                                      `🔢 **کد پیگیری:** ${trackingCode}`;
 
-                fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ chat_id: MY_CHAT_ID, text: adminMessage })
-                });
+                sendDirectMessage(adminMessage);
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
