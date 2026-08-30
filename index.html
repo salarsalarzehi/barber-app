@@ -23,14 +23,13 @@
         <!-- Header -->
         <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700/50 text-xs text-slate-300">
             <div class="flex items-center space-x-2 space-x-reverse">
-                <i class="fa-solid fa-angle-right text-base text-slate-400 cursor-pointer"></i>
+                <i class="fa-solid fa-scissors text-emerald-400"></i>
                 <div class="flex flex-col">
-                    <span class="font-bold text-white text-sm">ربات رزرو سالن سالار</span>
-                    <span class="text-[10px] text-emerald-400">@arminbbot</span>
+                    <span class="font-bold text-white text-sm">رزرو نوبت پیرایش سالار</span>
                 </div>
             </div>
             <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-emerald-500/20">
-                <i class="fa-solid fa-bolt text-[9px] ml-1"></i> مینی‌اپ بله
+                مینی‌اپ بله
             </span>
         </div>
 
@@ -39,10 +38,9 @@
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg">
                     <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=150&auto=format&fit=crop&q=80" alt="Salon Logo" class="w-full h-full object-cover rounded-[14px]" />
                 </div>
-                <span class="absolute -bottom-1 -right-1 bg-emerald-500 w-4 h-4 rounded-full border-2 border-slate-900"></span>
             </div>
             <div>
-                <h1 class="text-lg font-bold text-white flex items-center gap-2">پیرایش VIP سالار</h1>
+                <h1 class="text-lg font-bold text-white">پیرایش VIP سالار</h1>
                 <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
                     <i class="fa-solid fa-clock text-amber-400"></i> ساعت کاری: ۱۰:۰۰ تا ۲۰:۰۰
                 </p>
@@ -55,7 +53,7 @@
             <div class="flex items-center justify-between px-2 bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
                 <div class="flex items-center gap-2">
                     <div id="stepBadge" class="w-7 h-7 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-xs">۱</div>
-                    <span id="stepTitle" class="text-xs font-bold text-slate-200">انتخاب خدمت مورد نظر</span>
+                    <span id="stepTitle" class="text-xs font-bold text-slate-200">انتخاب خدمت</span>
                 </div>
                 <span id="stepProgress" class="text-[11px] text-slate-400 font-medium">مرحله ۱ از ۳</span>
             </div>
@@ -96,7 +94,7 @@
                 </div>
 
                 <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-slate-400">انتخاب روز مراجعه (۷ روز آینده):</label>
+                    <label class="block text-xs font-semibold text-slate-400">انتخاب روز مراجعه:</label>
                     <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar" id="dateSlotsContainer"></div>
                 </div>
 
@@ -122,10 +120,6 @@
                         <label class="block text-xs font-semibold text-slate-300 mb-1">شماره همراه:</label>
                         <input type="tel" id="custPhone" placeholder="۰۹۱۲۱۲۳۴۵۶۷" dir="ltr" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 text-right">
                     </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">توضیحات (اختیاری):</label>
-                        <textarea id="custNote" rows="2" placeholder="اگر توضیحی دارید بنویسید..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
-                    </div>
                 </div>
             </div>
 
@@ -134,8 +128,8 @@
                 <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto border border-emerald-500/40">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
-                <p class="text-xs text-slate-400">اطلاعات رزرو ارسال گردید.</p>
+                <h2 class="text-base font-bold text-white">درخواست نوبت آماده شد</h2>
+                <p class="text-xs text-slate-400 p-2 bg-slate-800 rounded-lg" id="statusMessage">اطلاعات رزرو ارسال شد.</p>
             </div>
 
         </div>
@@ -143,16 +137,23 @@
         <!-- Bottom Bar -->
         <div id="bottomBar" class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
             <button id="backBtn" onclick="prevStep()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-400 text-xs font-semibold hidden">بازگشت</button>
-            <button id="nextBtn" onclick="nextStep()" disabled class="w-full py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold">ادامه و انتخاب زمان</button>
+            <button id="nextBtn" onclick="nextStep()" disabled class="w-full py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold">انتخاب زمان</button>
         </div>
 
     </div>
 
     <script>
-        // آماده‌سازی اولیه SDK بله
-        if (window.Bale && window.Bale.WebApp) {
-            window.Bale.WebApp.ready();
-            window.Bale.WebApp.expand();
+        let baleSdkReady = false;
+
+        // بررسی و بارگذاری SDK بله
+        try {
+            if (window.Bale && window.Bale.WebApp) {
+                window.Bale.WebApp.ready();
+                window.Bale.WebApp.expand();
+                baleSdkReady = true;
+            }
+        } catch(e) {
+            console.log("Bale WebApp SDK Error", e);
         }
 
         const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
@@ -161,11 +162,9 @@
         function renderCalendar() {
             const container = document.getElementById('dateSlotsContainer');
             container.innerHTML = '';
-            
             for (let i = 0; i < 7; i++) {
                 const date = new Date();
                 date.setDate(date.getDate() + i);
-                
                 const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
                 const dayNum = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'short' });
                 const fullDateStr = `${dayName} ${dayNum}`;
@@ -243,7 +242,6 @@
             } else if (currentStep === 3) {
                 const name = document.getElementById('custName').value.trim();
                 const phone = document.getElementById('custPhone').value.trim();
-                const note = document.getElementById('custNote').value.trim() || "ندارد";
 
                 if (!name || !phone) {
                     alert('لطفاً نام و شماره همراه خود را وارد کنید.');
@@ -257,20 +255,26 @@
                                     `📞 تلفن: ${phone}\n` +
                                     `✂️ خدمت: ${selectedService}\n` +
                                     `⏰ زمان: ${selectedDate} (${selectedTime})\n` +
-                                    `📝 توضیحات: ${note}\n` +
                                     `🔢 کد پیگیری: ${trackingCode}`;
 
-                // ارسال مستقیم اطلاعات از طریق SDK بله به چت ربات
-                if (window.Bale && window.Bale.WebApp && window.Bale.WebApp.sendData) {
-                    window.Bale.WebApp.sendData(bookingData);
-                } else {
-                    alert("لطفاً مینی‌اپ را داخل پیام‌رسان بله باز کنید.");
-                    return;
+                let sent = false;
+                try {
+                    if (window.Bale && window.Bale.WebApp && window.Bale.WebApp.sendData) {
+                        window.Bale.WebApp.sendData(bookingData);
+                        sent = true;
+                    }
+                } catch(err) {
+                    console.log("sendData Error", err);
                 }
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
                 document.getElementById('successState').classList.remove('hidden');
+
+                if (!sent) {
+                    document.getElementById('statusMessage').innerText = "اطلاعات رزرو کپی شد! لطفا آن را در چت ربات پیست کنید.";
+                    navigator.clipboard.writeText(bookingData);
+                }
             }
         }
 
