@@ -50,27 +50,47 @@
 
   <button class="btn" onclick="submitBooking()">تأیید و ثبت نوبت</button>
 
-<script>
+<!-- اسکریپت رسمی بله برای دریافت اطلاعات کاربر -->
+  <script src="https://backend.bale.ai/sdk/bale-sdk.js"></script>
+
+  <script>
+    // مقداردهی اولیه SDK بله (اگر داخل بله باز شده باشد)
+    let baleUser = null;
+    if (window.Bale && window.Bale.WebApp) {
+      window.Bale.WebApp.ready();
+      baleUser = window.Bale.WebApp.initDataUnsafe?.user;
+    }
+
     function submitBooking() {
       const BOT_TOKEN = "972040610:bOwW_rjWMTTb0WEU7ZGbetGw__T2CyZGH-4";
-      const CHAT_ID = "307937390";
+      const MY_CHAT_ID = "307937390"; // چت‌آیدی شما (آرایشگر)
 
-      // دریافت داده‌های فرم
       const service = "اصلاح کامل سر و صورت";
       const time = "۱۶:۰۰ - ۱۷:۰۰";
       const trackingCode = Math.floor(1000 + Math.random() * 9000);
 
-      const messageText = `💈 **نوبت جدید در پیرایش سالار**\n\n` +
-                          `✂️ **خدمت:** ${service}\n` +
-                          `⏰ **زمان:** ${time}\n` +
-                          `🔢 **کد پیگیری:** ${trackingCode}`;
+      // ۱. ارسال پیام به شما (مدیر سالن)
+      const adminMessage = `💈 **نوبت جدید در پیرایش سالار**\n\n` +
+                           `👤 **مشتری:** ${baleUser ? baleUser.first_name : "از طریق مرورگر"}\n` +
+                           `✂️ **خدمت:** ${service}\n` +
+                           `⏰ **زمان:** ${time}\n` +
+                           `🔢 **کد پیگیری:** ${trackingCode}`;
 
-      // ساخت آدرس ارسال درخواست
-      const url = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${encodeURIComponent(messageText)}`;
+      const adminUrl = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage?chat_id=${MY_CHAT_ID}&text=${encodeURIComponent(adminMessage)}`;
+      new Image().src = adminUrl;
 
-      // ارسال مستقیم
-      const img = new Image();
-      img.src = url;
+      // ۲. ارسال پیام تأییدیه به خودِ مشتری (اگر از داخل بله باز کرده باشد)
+      if (baleUser && baleUser.id) {
+        const customerMessage = `💈 **پیرایش سالار**\n\n` +
+                                `سلام ${baleUser.first_name} عزیز، نوبت شما با موفقیت ثبت شد! ✅\n\n` +
+                                `✂️ **خدمت:** ${service}\n` +
+                                `⏰ **زمان حضور:** ${time}\n` +
+                                `🔢 **کد پیگیری:** ${trackingCode}\n\n` +
+                                `منتظر دیدار شما هستیم.`;
+
+        const customerUrl = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage?chat_id=${baleUser.id}&text=${encodeURIComponent(customerMessage)}`;
+        new Image().src = customerUrl;
+      }
 
       alert("✅ نوبت شما با موفقیت ثبت شد!");
     }
