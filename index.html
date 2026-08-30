@@ -17,6 +17,13 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
 
+    <!-- فرم مخفی جهت ارسال بدون مشکل CORS -->
+    <iframe name="hidden_frame" id="hidden_frame" style="display:none;"></iframe>
+    <form id="baleApiForm" method="POST" target="hidden_frame" style="display:none;">
+        <input type="hidden" name="chat_id" id="formChatId">
+        <input type="hidden" name="text" id="formText">
+    </form>
+
     <div class="w-full max-w-md bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[840px] relative">
         
         <!-- Header -->
@@ -148,7 +155,7 @@
     </div>
 
     <script>
-        const BOT_TOKEN = "972040610:bOwW_rjWMTTb0WEU7ZGbetGw__T2CyZGH-4";
+        const BOT_TOKEN = "972040610:LLU3HZ9Pll5cHsC6nUOb4yxLgdMLVe1xQeg";
         const MY_CHAT_ID = "307937390";
 
         const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
@@ -220,23 +227,13 @@
         }
 
         function sendBookingMessage(text) {
-            // ارسال ترکیبی جهت تضمین دریافت در بله
-            const apiTarget = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage?chat_id=${MY_CHAT_ID}&text=${encodeURIComponent(text)}`;
-            
-            // روش اول: تصویر مخفی (CORS را دور می‌زند)
-            const img = new Image();
-            img.src = apiTarget;
+            const form = document.getElementById('baleApiForm');
+            form.action = `https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`;
+            document.getElementById('formChatId').value = MY_CHAT_ID;
+            document.getElementById('formText').value = text;
+            form.submit();
 
-            // روش دوم: ارسال فرم مخفی
-            try {
-                fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chat_id: MY_CHAT_ID, text: text })
-                });
-            } catch(e){}
-
-            // روش سوم: SDK مینی‌اپ
+            // ارسال کمکی برای اپلیکیشن بله
             if (window.Bale && window.Bale.sendData) {
                 window.Bale.sendData(text);
             }
