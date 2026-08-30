@@ -16,62 +16,46 @@
         .bale-header-gradient {
             background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
         }
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 4px;
-            height: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 4px;
-        }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; height: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
     </style>
 </head>
 <body class="min-h-screen flex items-center justify-center p-2 sm:p-4">
 
-    <!-- Mobile Shell Simulator -->
     <div class="w-full max-w-md bg-slate-900 rounded-3xl overflow-hidden shadow-2xl border border-slate-800 flex flex-col h-[840px] relative">
         
-        <!-- Bale Top Bar -->
+        <!-- Header -->
         <div class="bg-slate-800 px-4 py-3 flex items-center justify-between border-b border-slate-700/50 text-xs text-slate-300">
             <div class="flex items-center space-x-2 space-x-reverse">
                 <i class="fa-solid fa-angle-right text-base text-slate-400 cursor-pointer"></i>
                 <div class="flex flex-col">
                     <span class="font-bold text-white text-sm">ربات رزرو سالن سالار</span>
-                    <span class="text-[10px] text-emerald-400">@Salar_BarberBot</span>
+                    <span class="text-[10px] text-emerald-400">@Arminhaghighibot</span>
                 </div>
             </div>
-            <div class="flex items-center space-x-2 space-x-reverse">
-                <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-emerald-500/20">
-                    <i class="fa-solid fa-bolt text-[9px] ml-1"></i> مینی‌اپ بله
-                </span>
-            </div>
+            <span class="bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full text-[10px] font-semibold border border-emerald-500/20">
+                <i class="fa-solid fa-bolt text-[9px] ml-1"></i> مینی‌اپ بله
+            </span>
         </div>
 
-        <!-- Header Banner -->
         <div class="bale-header-gradient p-5 border-b border-slate-800 flex items-center space-x-4 space-x-reverse">
             <div class="relative">
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-tr from-emerald-500 to-teal-400 p-0.5 shadow-lg">
-                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=150&auto=format&fit=crop&q=80" 
-                         alt="Salon Logo" 
-                         class="w-full h-full object-cover rounded-[14px]" />
+                    <img src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=150&auto=format&fit=crop&q=80" alt="Salon Logo" class="w-full h-full object-cover rounded-[14px]" />
                 </div>
                 <span class="absolute -bottom-1 -right-1 bg-emerald-500 w-4 h-4 rounded-full border-2 border-slate-900"></span>
             </div>
             <div>
-                <h1 class="text-lg font-bold text-white flex items-center gap-2">
-                    پیرایش VIP سالار
-                    <i class="fa-solid fa-circle-check text-emerald-400 text-xs"></i>
-                </h1>
+                <h1 class="text-lg font-bold text-white flex items-center gap-2">پیرایش VIP سالار</h1>
                 <p class="text-xs text-slate-400 mt-1 flex items-center gap-1">
                     <i class="fa-solid fa-clock text-amber-400"></i> ساعت کاری: ۱۰:۰۰ تا ۲۰:۰۰
                 </p>
             </div>
         </div>
 
-        <!-- Main Form Area -->
+        <!-- Main Container -->
         <div class="flex-1 overflow-y-auto p-4 space-y-6 custom-scrollbar" id="mainContainer">
             
-            <!-- Step Indicator -->
             <div class="flex items-center justify-between px-2 bg-slate-800/40 p-3 rounded-2xl border border-slate-800">
                 <div class="flex items-center gap-2">
                     <div id="stepBadge" class="w-7 h-7 rounded-full bg-emerald-500 text-white font-bold flex items-center justify-center text-xs">۱</div>
@@ -80,185 +64,123 @@
                 <span id="stepProgress" class="text-[11px] text-slate-400 font-medium">مرحله ۱ از ۳</span>
             </div>
 
-            <!-- STEP 1: SERVICE SELECTION -->
+            <!-- STEP 1 -->
             <div id="step1" class="space-y-3">
                 <label class="block text-xs font-semibold text-slate-400">خدمت را انتخاب کنید:</label>
-                
                 <div class="space-y-2">
-                    <div onclick="selectService(this, 'اصلاح و استایل مو', 250000)" 
-                         class="service-card p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer transition-all flex items-center justify-between group">
+                    <div onclick="selectService(this, 'اصلاح و استایل مو', 250000)" class="service-card p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer transition-all flex items-center justify-between group">
                         <div class="flex items-center space-x-3 space-x-reverse">
-                            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base">
-                                <i class="fa-solid fa-scissors"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center text-base"><i class="fa-solid fa-scissors"></i></div>
                             <div>
                                 <h3 class="text-sm font-semibold text-white group-hover:text-emerald-400 transition-colors">اصلاح و استایل مو</h3>
                                 <p class="text-[11px] text-slate-400">مدت زمان: ۴۵ دقیقه</p>
                             </div>
                         </div>
-                        <div class="text-left">
-                            <span class="text-sm font-bold text-emerald-400">۲۵۰,۰۰۰</span>
-                            <span class="text-[10px] text-slate-400">تومان</span>
-                        </div>
+                        <span class="text-sm font-bold text-emerald-400">۲۵۰,۰۰۰ تومان</span>
                     </div>
 
-                    <div onclick="selectService(this, 'اصلاح سر و آنکارد ریش', 350000)" 
-                         class="service-card p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer transition-all flex items-center justify-between group">
+                    <div onclick="selectService(this, 'اصلاح کامل سر و صورت', 350000)" class="service-card p-3 rounded-xl bg-slate-800/60 border border-slate-700/60 hover:border-emerald-500/50 cursor-pointer transition-all flex items-center justify-between group">
                         <div class="flex items-center space-x-3 space-x-reverse">
-                            <div class="w-10 h-10 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center text-base">
-                                <i class="fa-solid fa-user-ninja"></i>
-                            </div>
+                            <div class="w-10 h-10 rounded-lg bg-teal-500/10 text-teal-400 flex items-center justify-center text-base"><i class="fa-solid fa-user-ninja"></i></div>
                             <div>
-                                <h3 class="text-sm font-semibold text-white group-hover:text-teal-400 transition-colors">اصلاح کامل سر و ریش</h3>
+                                <h3 class="text-sm font-semibold text-white group-hover:text-teal-400 transition-colors">اصلاح کامل سر و صورت</h3>
                                 <p class="text-[11px] text-slate-400">مدت زمان: ۶۰ دقیقه</p>
                             </div>
                         </div>
-                        <div class="text-left">
-                            <span class="text-sm font-bold text-emerald-400">۳۵۰,۰۰۰</span>
-                            <span class="text-[10px] text-slate-400">تومان</span>
-                        </div>
+                        <span class="text-sm font-bold text-emerald-400">۳۵۰,۰۰۰ تومان</span>
                     </div>
                 </div>
             </div>
 
-            <!-- STEP 2: DATE & TIME SELECTION -->
+            <!-- STEP 2 -->
             <div id="step2" class="space-y-4 hidden">
                 <div class="bg-emerald-500/10 border border-emerald-500/20 p-3 rounded-xl flex items-center justify-between">
-                    <div>
-                        <span class="text-[11px] text-slate-400 block">خدمت انتخابی:</span>
-                        <span id="summaryServiceName" class="text-xs font-bold text-emerald-400">-</span>
-                    </div>
+                    <span id="summaryServiceName" class="text-xs font-bold text-emerald-400">-</span>
                     <span id="summaryServicePrice" class="text-xs font-bold text-white">-</span>
                 </div>
 
-                <!-- Calendar Days -->
                 <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-slate-400">روز مراجعه را انتخاب کنید:</label>
-                    <div class="grid grid-cols-3 gap-2">
-                        <button type="button" onclick="selectDate(this, 'امروز')" 
-                                class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-center hover:border-emerald-500 transition-all">
-                            <span class="text-[10px] block text-slate-400">روز جاری</span>
-                            <span class="text-xs font-bold text-white">امروز</span>
-                        </button>
-                        <button type="button" onclick="selectDate(this, 'فردا')" 
-                                class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-center hover:border-emerald-500 transition-all">
-                            <span class="text-[10px] block text-slate-400">روز بعدی</span>
-                            <span class="text-xs font-bold text-white">فردا</span>
-                        </button>
+                    <label class="block text-xs font-semibold text-slate-400">روز مراجعه:</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <button type="button" onclick="selectDate(this, 'امروز')" class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-bold text-white">امروز</button>
+                        <button type="button" onclick="selectDate(this, 'فردا')" class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-bold text-white">فردا</button>
                     </div>
                 </div>
 
-                <!-- Time Slots -->
                 <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-slate-400">ساعت حضور را انتخاب کنید:</label>
-                    <div class="grid grid-cols-2 gap-2" id="timeSlotsContainer">
-                        <div class="text-xs text-slate-400 text-center col-span-2 py-4">در حال دریافت ساعت‌ها از دیتابیس...</div>
-                    </div>
+                    <label class="block text-xs font-semibold text-slate-400">ساعت حضور:</label>
+                    <div class="grid grid-cols-2 gap-2" id="timeSlotsContainer"></div>
                 </div>
             </div>
 
-            <!-- STEP 3: CUSTOMER INFO -->
+            <!-- STEP 3 -->
             <div id="step3" class="space-y-4 hidden">
                 <div class="bg-slate-800/80 p-3 rounded-xl border border-slate-700 space-y-1.5 text-xs">
-                    <div class="flex justify-between text-slate-300">
-                        <span>خدمت:</span>
-                        <span id="finalService" class="font-bold text-white">-</span>
-                    </div>
-                    <div class="flex justify-between text-slate-300">
-                        <span>زمان رزرو:</span>
-                        <span id="finalDateTime" class="font-bold text-emerald-400">-</span>
-                    </div>
-                    <div class="flex justify-between text-slate-300 border-t border-slate-700/60 pt-1.5">
-                        <span>مبلغ:</span>
-                        <span id="finalPrice" class="font-bold text-white">-</span>
-                    </div>
+                    <div class="flex justify-between text-slate-300"><span>خدمت:</span><span id="finalService" class="font-bold text-white">-</span></div>
+                    <div class="flex justify-between text-slate-300"><span>زمان رزرو:</span><span id="finalDateTime" class="font-bold text-emerald-400">-</span></div>
                 </div>
 
                 <div class="space-y-3">
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">نام و نام خانوادگی:</label>
-                        <input type="text" id="custName" placeholder="مثال: علی محمدی" 
-                               class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
+                        <input type="text" id="custName" placeholder="مثال: علی محمدی" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-slate-300 mb-1">شماره همراه:</label>
-                        <input type="tel" id="custPhone" placeholder="۰۹۱۲۱۲۳۴۵۶۷" dir="ltr"
-                               class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 text-right">
+                        <input type="tel" id="custPhone" placeholder="۰۹۱۲۱۲۳۴۵۶۷" dir="ltr" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500 text-right">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">توضیحات (اختیاری):</label>
+                        <textarea id="custNote" rows="2" placeholder="اگر توضیحی دارید بنویسید..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-emerald-500"></textarea>
                     </div>
                 </div>
             </div>
 
-            <!-- SUCCESS STATE -->
+            <!-- SUCCESS -->
             <div id="successState" class="text-center py-8 space-y-4 hidden">
                 <div class="w-16 h-16 bg-emerald-500/20 text-emerald-400 rounded-full flex items-center justify-center text-3xl mx-auto border border-emerald-500/40">
                     <i class="fa-solid fa-check"></i>
                 </div>
-                <div>
-                    <h2 class="text-base font-bold text-white">نوبت شما ثبت شد!</h2>
-                    <p class="text-xs text-slate-400 mt-1">اطلاعات برای آرایشگر ارسال گردید.</p>
-                </div>
+                <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
             </div>
 
         </div>
 
-        <!-- Fixed Bottom Action Bar -->
+        <!-- Bottom Bar -->
         <div id="bottomBar" class="p-4 bg-slate-900 border-t border-slate-800 flex items-center justify-between">
-            <button id="backBtn" onclick="prevStep()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-400 text-xs font-semibold hover:text-white hidden">
-                بازگشت
-            </button>
-            <button id="nextBtn" onclick="nextStep()" disabled 
-                    class="w-full py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold transition-all cursor-not-allowed">
-                ادامه و انتخاب زمان
-            </button>
+            <button id="backBtn" onclick="prevStep()" class="px-4 py-2.5 rounded-xl bg-slate-800 text-slate-400 text-xs font-semibold hidden">بازگشت</button>
+            <button id="nextBtn" onclick="nextStep()" disabled class="w-full py-3 rounded-xl bg-slate-800 text-slate-500 text-xs font-bold">ادامه و انتخاب زمان</button>
         </div>
 
     </div>
 
     <script>
         const API_URL = "https://api.npoint.io/97d3a2e9e382c87c3c41";
-        const allTimes = [
-            "۱۰:۰۰ - ۱۱:۰۰",
-            "۱۱:۰۰ - ۱۲:۰۰",
-            "۱۶:۰۰ - ۱۷:۰۰",
-            "۱۷:۰۰ - ۱۸:۰۰",
-            "۱۸:۰۰ - ۱۹:۰۰",
-            "۱۹:۰۰ - ۲۰:۰۰"
-        ];
+        const BOT_TOKEN = "512078925:APjMoXrgKKvvd3Urrr5cnpsiBmYK2fAp70o";
+        const MY_CHAT_ID = "307937390"; // آی‌دی آرایشگر
 
-        let currentStep = 1;
-        let selectedService = null;
-        let selectedPrice = 0;
-        let selectedDate = null;
-        let selectedTime = null;
-        let disabledTimes = [];
+        const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
+        let currentStep = 1, selectedService = null, selectedPrice = 0, selectedDate = null, selectedTime = null, disabledTimes = [];
 
         function fetchDatabaseTimes() {
-            fetch(API_URL)
-                .then(res => res.json())
-                .then(data => {
-                    disabledTimes = data.disabled || [];
-                    renderTimeSlots();
-                })
-                .catch(() => {
-                    renderTimeSlots();
-                });
+            fetch(API_URL).then(res => res.json()).then(data => {
+                disabledTimes = data.disabled || [];
+                renderTimeSlots();
+            }).catch(() => renderTimeSlots());
         }
 
         function renderTimeSlots() {
             const container = document.getElementById('timeSlotsContainer');
             container.innerHTML = '';
-
             allTimes.forEach(time => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                const isDisabled = disabledTimes.includes(time);
-
-                if (isDisabled) {
-                    btn.className = "time-btn p-2.5 rounded-xl border border-slate-800 bg-slate-950/90 text-xs text-slate-600 text-center cursor-not-allowed line-through opacity-50 select-none border-dashed";
-                    btn.innerText = time + " (تکمیل)";
+                if (disabledTimes.includes(time)) {
+                    btn.className = "p-2.5 rounded-xl border border-slate-800 bg-slate-950/90 text-xs text-slate-600 line-through opacity-50";
+                    btn.innerText = time + " (پر شد)";
                     btn.disabled = true;
                 } else {
-                    btn.className = "time-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-white text-center hover:border-emerald-500 transition-all cursor-pointer";
+                    btn.className = "time-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-white";
                     btn.innerText = time;
                     btn.onclick = () => selectTime(btn, time);
                 }
@@ -266,51 +188,34 @@
             });
         }
 
-        function selectService(element, serviceName, price) {
-            document.querySelectorAll('.service-card').forEach(el => {
-                el.classList.remove('border-emerald-500', 'bg-emerald-500/10');
-            });
-            element.classList.add('border-emerald-500', 'bg-emerald-500/10');
-
-            selectedService = serviceName;
-            selectedPrice = price;
-
+        function selectService(el, name, price) {
+            document.querySelectorAll('.service-card').forEach(e => e.classList.remove('border-emerald-500', 'bg-emerald-500/10'));
+            el.classList.add('border-emerald-500', 'bg-emerald-500/10');
+            selectedService = name; selectedPrice = price;
             const nextBtn = document.getElementById('nextBtn');
             nextBtn.disabled = false;
-            nextBtn.classList.remove('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-            nextBtn.classList.add('bg-emerald-500', 'text-white');
+            nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold";
         }
 
-        function selectDate(element, dateStr) {
-            document.querySelectorAll('.date-btn').forEach(el => {
-                el.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
-            });
-            element.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
+        function selectDate(el, dateStr) {
+            document.querySelectorAll('.date-btn').forEach(e => e.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400'));
+            el.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
             selectedDate = dateStr;
-            checkStep2Validation();
+            checkStep2();
         }
 
-        function selectTime(element, timeStr) {
-            document.querySelectorAll('.time-btn').forEach(el => {
-                if(!el.disabled) {
-                    el.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
-                }
-            });
-            element.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
+        function selectTime(el, timeStr) {
+            document.querySelectorAll('.time-btn').forEach(e => { if(!e.disabled) e.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400'); });
+            el.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
             selectedTime = timeStr;
-            checkStep2Validation();
+            checkStep2();
         }
 
-        function checkStep2Validation() {
+        function checkStep2() {
             const nextBtn = document.getElementById('nextBtn');
             if (selectedDate && selectedTime) {
                 nextBtn.disabled = false;
-                nextBtn.classList.remove('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-                nextBtn.classList.add('bg-emerald-500', 'text-white');
-            } else {
-                nextBtn.disabled = true;
-                nextBtn.classList.add('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-                nextBtn.classList.remove('bg-emerald-500', 'text-white');
+                nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold";
             }
         }
 
@@ -320,45 +225,41 @@
                 document.getElementById('step1').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
                 document.getElementById('backBtn').classList.remove('hidden');
-                
-                document.getElementById('stepBadge').innerText = '۲';
-                document.getElementById('stepTitle').innerText = 'انتخاب روز و ساعت حضور';
-                document.getElementById('stepProgress').innerText = 'مرحله ۲ از ۳';
-
                 document.getElementById('summaryServiceName').innerText = selectedService;
                 document.getElementById('summaryServicePrice').innerText = selectedPrice.toLocaleString('fa-IR') + ' تومان';
-
                 fetchDatabaseTimes();
-
-                const nextBtn = document.getElementById('nextBtn');
-                nextBtn.innerText = 'تأیید زمان و مرحله بعد';
-                nextBtn.disabled = true;
-                nextBtn.classList.add('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-                nextBtn.classList.remove('bg-emerald-500', 'text-white');
-
             } else if (currentStep === 2) {
                 currentStep = 3;
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step3').classList.remove('hidden');
-
-                document.getElementById('stepBadge').innerText = '۳';
-                document.getElementById('stepTitle').innerText = 'ثبت مشخصات و نهایی‌سازی';
-                document.getElementById('stepProgress').innerText = 'مرحله ۳ از ۳';
-
                 document.getElementById('finalService').innerText = selectedService;
                 document.getElementById('finalDateTime').innerText = selectedDate + ' - ساعت ' + selectedTime;
-                document.getElementById('finalPrice').innerText = selectedPrice.toLocaleString('fa-IR') + ' تومان';
-
-                const nextBtn = document.getElementById('nextBtn');
-                nextBtn.innerText = 'ثبت نهایی و ارسال نوبت';
+                document.getElementById('nextBtn').innerText = 'ثبت نهایی و ارسال نوبت';
             } else if (currentStep === 3) {
                 const name = document.getElementById('custName').value.trim();
                 const phone = document.getElementById('custPhone').value.trim();
+                const note = document.getElementById('custNote').value.trim() || "ندارد";
 
                 if (!name || !phone) {
                     alert('لطفاً نام و شماره همراه خود را وارد کنید.');
                     return;
                 }
+
+                const trackingCode = Math.floor(1000 + Math.random() * 9000);
+
+                const adminMessage = `💈 **نوبت جدید در پیرایش سالار**\n\n` +
+                                     `👤 **مشتری:** ${name}\n` +
+                                     `📞 **تلفن:** ${phone}\n` +
+                                     `✂️ **خدمت:** ${selectedService}\n` +
+                                     `⏰ **زمان:** ${selectedDate} (${selectedTime})\n` +
+                                     `📝 **توضیحات:** ${note}\n` +
+                                     `🔢 **کد پیگیری:** ${trackingCode}`;
+
+                fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ chat_id: MY_CHAT_ID, text: adminMessage })
+                });
 
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('bottomBar').classList.add('hidden');
@@ -372,27 +273,11 @@
                 document.getElementById('step2').classList.add('hidden');
                 document.getElementById('step1').classList.remove('hidden');
                 document.getElementById('backBtn').classList.add('hidden');
-
-                document.getElementById('stepBadge').innerText = '۱';
-                document.getElementById('stepTitle').innerText = 'انتخاب خدمت مورد نظر';
-                document.getElementById('stepProgress').innerText = 'مرحله ۱ از ۳';
-
-                const nextBtn = document.getElementById('nextBtn');
-                nextBtn.innerText = 'ادامه و انتخاب زمان';
-                nextBtn.disabled = false;
-                nextBtn.classList.remove('bg-slate-800', 'text-slate-500', 'cursor-not-allowed');
-                nextBtn.classList.add('bg-emerald-500', 'text-white');
             } else if (currentStep === 3) {
                 currentStep = 2;
                 document.getElementById('step3').classList.add('hidden');
                 document.getElementById('step2').classList.remove('hidden');
-
-                document.getElementById('stepBadge').innerText = '۲';
-                document.getElementById('stepTitle').innerText = 'انتخاب روز و ساعت حضور';
-                document.getElementById('stepProgress').innerText = 'مرحله ۲ از ۳';
-
-                const nextBtn = document.getElementById('nextBtn');
-                nextBtn.innerText = 'تأیید زمان و مرحله بعد';
+                document.getElementById('nextBtn').innerText = 'تأیید زمان و مرحله بعد';
             }
         }
     </script>
