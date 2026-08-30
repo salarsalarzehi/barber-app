@@ -7,7 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/gh/rastikerdar/yekan-bakh@main/css/yekan-bakh.css" rel="stylesheet" type="text/css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
-    <!-- اسکریپت رسمی مینی‌اپ بله -->
     <script src="https://tapi.bale.ai/static/js/bale-miniapp.js"></script>
     <style>
         body { font-family: 'Yekan Bakh', 'Vazirmatn', sans-serif; background-color: #0f172a; color: #f8fafc; }
@@ -96,11 +95,8 @@
                 </div>
 
                 <div class="space-y-2">
-                    <label class="block text-xs font-semibold text-slate-400">روز مراجعه:</label>
-                    <div class="grid grid-cols-2 gap-2">
-                        <button type="button" onclick="selectDate(this, 'امروز')" class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-bold text-white">امروز</button>
-                        <button type="button" onclick="selectDate(this, 'فردا')" class="date-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-bold text-white">فردا</button>
-                    </div>
+                    <label class="block text-xs font-semibold text-slate-400">انتخاب روز مراجعه (۷ روز آینده):</label>
+                    <div class="flex gap-2 overflow-x-auto pb-2 custom-scrollbar" id="dateSlotsContainer"></div>
                 </div>
 
                 <div class="space-y-2">
@@ -138,7 +134,7 @@
                     <i class="fa-solid fa-check"></i>
                 </div>
                 <h2 class="text-base font-bold text-white">نوبت شما با موفقیت ثبت شد!</h2>
-                <p class="text-xs text-slate-400">اطلاعات برای ربات ارسال گردید.</p>
+                <p class="text-xs text-slate-400">اطلاعات برای مدیریت ارسال شد.</p>
             </div>
 
         </div>
@@ -152,18 +148,31 @@
     </div>
 
     <script>
-        const API_URL = "https://api.npoint.io/97d3a2e9e382c87c3c41";
         const BOT_TOKEN = "972040610:bOwW_rjWMTTb0WEU7ZGbetGw__T2CyZGH-4";
         const MY_CHAT_ID = "307937390";
 
         const allTimes = ["۱۰:۰۰ - ۱۱:۰۰", "۱۱:۰۰ - ۱۲:۰۰", "۱۶:۰۰ - ۱۷:۰۰", "۱۷:۰۰ - ۱۸:۰۰", "۱۸:۰۰ - ۱۹:۰۰", "۱۹:۰۰ - ۲۰:۰۰"];
-        let currentStep = 1, selectedService = null, selectedPrice = 0, selectedDate = null, selectedTime = null, disabledTimes = [];
+        let currentStep = 1, selectedService = null, selectedPrice = 0, selectedDate = null, selectedTime = null;
 
-        function fetchDatabaseTimes() {
-            fetch(API_URL).then(res => res.json()).then(data => {
-                disabledTimes = data.disabled || [];
-                renderTimeSlots();
-            }).catch(() => renderTimeSlots());
+        function renderCalendar() {
+            const container = document.getElementById('dateSlotsContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                
+                const dayName = date.toLocaleDateString('fa-IR', { weekday: 'short' });
+                const dayNum = date.toLocaleDateString('fa-IR', { day: 'numeric', month: 'short' });
+                const fullDateStr = `${dayName} ${dayNum}`;
+
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = "date-btn flex-shrink-0 min-w-[70px] p-2 rounded-xl border border-slate-700 bg-slate-800 text-center transition-all cursor-pointer";
+                btn.innerHTML = `<div class="text-[10px] text-slate-400">${dayName}</div><div class="text-xs font-bold text-white mt-1">${dayNum}</div>`;
+                btn.onclick = () => selectDate(btn, fullDateStr);
+                container.appendChild(btn);
+            }
         }
 
         function renderTimeSlots() {
@@ -172,15 +181,9 @@
             allTimes.forEach(time => {
                 const btn = document.createElement('button');
                 btn.type = 'button';
-                if (disabledTimes.includes(time)) {
-                    btn.className = "p-2.5 rounded-xl border border-slate-800 bg-slate-950/90 text-xs text-slate-600 line-through opacity-50";
-                    btn.innerText = time + " (پر شد)";
-                    btn.disabled = true;
-                } else {
-                    btn.className = "time-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-white";
-                    btn.innerText = time;
-                    btn.onclick = () => selectTime(btn, time);
-                }
+                btn.className = "time-btn p-2.5 rounded-xl border border-slate-700 bg-slate-800 text-xs font-semibold text-white transition-all cursor-pointer";
+                btn.innerText = time;
+                btn.onclick = () => selectTime(btn, time);
                 container.appendChild(btn);
             });
         }
@@ -191,7 +194,7 @@
             selectedService = name; selectedPrice = price;
             const nextBtn = document.getElementById('nextBtn');
             nextBtn.disabled = false;
-            nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold";
+            nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold cursor-pointer";
         }
 
         function selectDate(el, dateStr) {
@@ -202,7 +205,7 @@
         }
 
         function selectTime(el, timeStr) {
-            document.querySelectorAll('.time-btn').forEach(e => { if(!e.disabled) e.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400'); });
+            document.querySelectorAll('.time-btn').forEach(e => e.classList.remove('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400'));
             el.classList.add('border-emerald-500', 'bg-emerald-500/20', 'text-emerald-400');
             selectedTime = timeStr;
             checkStep2();
@@ -212,19 +215,17 @@
             const nextBtn = document.getElementById('nextBtn');
             if (selectedDate && selectedTime) {
                 nextBtn.disabled = false;
-                nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold";
+                nextBtn.className = "w-full py-3 rounded-xl bg-emerald-500 text-white text-xs font-bold cursor-pointer";
             }
         }
 
         function sendDirectMessage(textMessage) {
-            // روش اول: ارسال مستقیم از طریق API بله
             fetch(`https://tapi.bale.ai/bot${BOT_TOKEN}/sendMessage`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ chat_id: MY_CHAT_ID, text: textMessage })
             }).catch(err => console.log(err));
 
-            // روش دوم: ارسال دیتا از طریق WebApp بله به چت ربات
             if (window.Bale && window.Bale.sendData) {
                 window.Bale.sendData(textMessage);
             }
@@ -238,7 +239,8 @@
                 document.getElementById('backBtn').classList.remove('hidden');
                 document.getElementById('summaryServiceName').innerText = selectedService;
                 document.getElementById('summaryServicePrice').innerText = selectedPrice.toLocaleString('fa-IR') + ' تومان';
-                fetchDatabaseTimes();
+                renderCalendar();
+                renderTimeSlots();
             } else if (currentStep === 2) {
                 currentStep = 3;
                 document.getElementById('step2').classList.add('hidden');
